@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: "us-east-1"
-      AWS_ACCOUNT_ID: "298280266775"
+      AWS_ACCOUNT_ID: "975049989584"
       ECR_REPO_NAME: "project-s3-events-lambda"
       IMAGE_NAME: "s3-events"
 

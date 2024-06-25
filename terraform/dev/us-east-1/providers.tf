@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  allowed_account_ids = ["298280266775"]
+  allowed_account_ids = ["975049989584"]
   region              = "us-east-1"
 
   default_tags {

@@ -16,3 +16,4 @@ docker-build:
 clean:
 	@echo "Cleaning build artifacts..."
 	rm -rf $(BUILD_DIR)
+
