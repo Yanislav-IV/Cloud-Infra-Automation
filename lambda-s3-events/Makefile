@@ -14,3 +14,4 @@ docker-build:
 clean:
 	@echo "Cleaning build artifacts..."
 	rm -rf build
+

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
     paths:
       - 'lambda-s3-events/**'
 
