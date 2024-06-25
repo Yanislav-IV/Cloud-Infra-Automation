@@ -334,6 +334,8 @@ aws s3 cp test.txt s3://project-events-bucket/source/test.txt
 
 **Wait few minutes and check logs in lambda console**:
 
+**Note:** The first lambda execution might time out because of cold start.
+
 ### Terraform Configuration
 
 1. **Defining the Lambda Function**:
