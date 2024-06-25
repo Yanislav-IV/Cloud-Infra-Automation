@@ -198,13 +198,13 @@ To test the Docker images locally, follow these steps:
 2. **Pull and Run the Docker Images**:
     - Pull and run the BusyBox image:
       ```sh
-      docker pull <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:bb-<image-version>
-      docker run -it --rm <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:bb-<image-version>
+      docker pull <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:bb-0.21.3
+      docker run -it --rm <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:bb-0.21.3
       ```
     - Pull and run the Amazon Linux 2 image:
       ```sh
-      docker pull <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:al2-<image-version>
-      docker run -it --rm <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:al2-<image-version>
+      docker pull <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:al2-0.21.3
+      docker run -it --rm <account-id>.dkr.ecr.us-east-1.amazonaws.com/project-litecoin:al2-0.21.3
       ```
 
 ### Image Size and Security
