@@ -304,6 +304,11 @@ and automating the deployment process using Docker and GitHub Actions.
 
 **Trigger the GitHub Actions Pipeline**:
 
+1. Run the following Terraform command to create the necessary ECR repository:
+      ```sh
+      terraform apply --target module.s3_events_lambda_ecr_repo
+      ```
+2. 
     - Create a no-op PR (e.g., add an empty line) in any file in the [lambda-s3-events](lambda-s3-events) folder.
     - Merge the PR to master to trigger the [s3-events-lambda.yml](.github%2Fworkflows%2Fs3-events-lambda.yml) workflow.
     - Follow the pipeline progress in the GitHub Actions tab.
@@ -315,10 +320,8 @@ and automating the deployment process using Docker and GitHub Actions.
 1. Update the local tag variable in [lambda.tf](terraform%2Fdev%2Fus-east-1%2Flambda.tf) so the lambda can use the
    new image:
 
-2. Apply Terraform:
+2. Apply the rest of Terraform configuration:
       ```sh
-      cd terraform/dev/us-east-1
-      terraform init
       terraform apply
       ```
 

@@ -1,7 +1,7 @@
 locals {
   image_uri     = "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.function_name}-lambda:${local.tag}"
   function_name = "${local.project_name}-s3-events"
-  tag           = "0.2.40"
+  tag           = "0.1.0"
 
   source_dir = "source/"
   target_dir = "target/"
