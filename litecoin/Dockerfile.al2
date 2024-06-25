@@ -1,0 +1,25 @@
+FROM amazonlinux:2
+
+# Install necessary dependencies
+RUN yum update -y && \
+    yum install -y shadow-utils && \
+    yum clean all
+
+# Create a user group and user for running the application
+RUN groupadd -r litecoin && useradd -r -g litecoin litecoin
+
+# Create a directory for Litecoin data and set permissions
+RUN mkdir -p /home/litecoin && chown litecoin:litecoin /home/litecoin
+
+# Copy the stripped litecoind binary to the appropriate location
+COPY build/litecoind /usr/local/bin/litecoind
+
+# Ensure the litecoind binary is executable
+RUN chmod +x /usr/local/bin/litecoind
+
+# Set the working directory and switch to the non-root user
+WORKDIR /home/litecoin
+USER litecoin
+
+# Start the Litecoin daemon and print logs to the console
+CMD ["/usr/local/bin/litecoind", "-printtoconsole"]

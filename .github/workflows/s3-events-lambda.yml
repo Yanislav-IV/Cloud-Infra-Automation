@@ -1,0 +1,71 @@
+name: S3 Trigger Lambda Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'lambda-s3-events/**'
+
+jobs:
+  build_deploy_lambda:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: "us-east-1"
+      AWS_ACCOUNT_ID: "975049989584"
+      ECR_REPO_NAME: "project-s3-events-lambda"
+      IMAGE_NAME: "s3-events"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: '5.12.0'
+
+      - name: Execute GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          useConfigFile: true
+
+      - name: Set GitVersion output as environment variable
+        run: echo "VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: make -C lambda-s3-events docker-build IMAGE_NAME=${{ env.IMAGE_NAME }} TAG=${{ env.VERSION }}
+
+      - name: Run Trivy Scan on Docker Image
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Tag and Push Docker image to ECR
+        run: |
+          ECR_REPO_URL="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}"
+          IMAGE_TAG="$ECR_REPO_URL:${{ env.VERSION }}"
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.VERSION }} $IMAGE_TAG
+          docker push $IMAGE_TAG
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          draft: false
+          prerelease: false
